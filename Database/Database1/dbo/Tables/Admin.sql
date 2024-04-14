@@ -1,0 +1,6 @@
+﻿CREATE TABLE [dbo].[Admin] (
+    [UserID] INT NOT NULL,
+    PRIMARY KEY CLUSTERED ([UserID] ASC),
+    FOREIGN KEY ([UserID]) REFERENCES [dbo].[User] ([UserID]) ON DELETE CASCADE ON UPDATE CASCADE
+);
+

@@ -1,0 +1,7 @@
+﻿CREATE TABLE [dbo].[Cart] (
+    [CartID] INT IDENTITY (1, 1) NOT NULL,
+    [UserID] INT NOT NULL,
+    PRIMARY KEY CLUSTERED ([CartID] ASC),
+    FOREIGN KEY ([UserID]) REFERENCES [dbo].[Customer] ([UserID]) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
