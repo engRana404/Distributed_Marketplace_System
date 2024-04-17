@@ -13,7 +13,7 @@ exports.getFilteredProducts =  catchAsync(async (req, res, next) => {
     [Op.and]: [
       req.query.name ? {
         name: {
-        [Op.like]: sequelize.literal(`'%${req.query.name}%'`)
+        [Op.iLike]: sequelize.literal(`'%${req.query.name}%'`)
       } 
     } : {},
     req.query.startPrice && req.query.endPrice ? {
@@ -31,6 +31,8 @@ exports.getFilteredProducts =  catchAsync(async (req, res, next) => {
     {}
     ]
   }
+
+  console.log(filter)
   let includeList = []
   if(req.query.tagsIds && JSON.parse(req.query.tagsIds).length > 0){
     console.log(JSON.parse(req.query.tagsIds)[0])

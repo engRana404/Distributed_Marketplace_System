@@ -18,7 +18,43 @@ exports.createAddress = catchAsync(async (req, res, next) => {
 })
 
 exports.getFilteredAddresses = catchAsync(async (req, res, next) => {
+  const { page = 1, limit = 20 } = req.query;
+  const offset = (page - 1) * limit
+  const filter = {
+    [Op.and]: [
+      req.query.streetAddress ? {
+        streetAddress: {
+          [Op.iLike]: sequelize.literal(`'%${req.query.streetAddress}%'`)
+        }
+      } : {},
+      req.query.city ? {
+        city: {
+          [Op.iLike]: sequelize.literal(`'%${req.query.city}%'`)
+        }
+      }: {},
+      req.query.province ? {
+        province: {
+          [Op.iLike]: sequelize.literal(`'%${req.query.province}%'`)
+        }
+      }: {},
+      req.query.userId ? {
+        userId: req.query.userId 
+      }: {}
+    ]
+  }
+  const addresses = await Address.findAll({
+    limit,
+    offset,
+    where: filter,
+    order: [['createdAt','DESC']],
+  })
 
+  res.status(200).json({
+    status: "success",
+    data: {
+      addresses
+    }
+  })
 })
 
 exports.getAddressById = catchAsync(async (req, res, next) => {
@@ -35,5 +71,49 @@ exports.getAddressById = catchAsync(async (req, res, next) => {
     data: {
       address
     }
+  })
+})
+
+exports.updateAddress = catchAsync(async (req, res, next) => {
+  const filteredBody = filterObj(req.body,'streetAddress','city','province','postalCode')
+  const [rowsAffected, updatedRows] = await Address.update(filteredBody,{
+    where: {
+      [Op.and]: [
+        {
+          id: req.params.id
+        },
+        {
+          userId: req.user.id
+        }
+      ]
+    },
+    returning: true
+  })
+  if(rowsAffected === 0){
+    return next(new AppError("No Address with this id!", 404))
+  }
+  res.status(200).json({
+    status: "success",
+    data: {
+      address: updatedRows[0]
+    }
+  })
+
+
+})
+
+exports.deleteAddress = catchAsync(async (req, res, next) => {
+  const deletedAddress = await Address.destroy({
+    where: {
+      id: req.params.id,
+      userId: req.user.id
+    }
+  })
+ if(!deletedAddress) {
+  return next(new AppError("No Address with this id!", 404))
+
+ }
+  res.status(204).json({
+    status: "success" 
   })
 })
