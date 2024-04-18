@@ -13,7 +13,7 @@ const errorHandler = require('./controllers/errorController')
 const dotenv = require("dotenv");
 
 
-dotenv.config({ path: '../.env' });
+
 const app = express()
 app.use(bodyParser.json())
 app.use('/api/v1/auth/',authRouter)
