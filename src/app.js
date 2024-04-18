@@ -5,12 +5,15 @@ const productRouter = require('./routes/productRoutes')
 const orderRouter = require('./routes/orderRoutes')
 const tagRouter = require('./routes/tagRoutes')
 const addressRouter = require('./routes/addressRoutes')
+const voucherRouter = require('./routes/voucherRoutes')
 const sequelize = require('./config/database');
 const bodyParser = require('body-parser');
 const AppError = require('./utils/appError');
 const errorHandler = require('./controllers/errorController')
+const dotenv = require("dotenv");
 
 
+dotenv.config({ path: '../.env' });
 const app = express()
 app.use(bodyParser.json())
 app.use('/api/v1/auth/',authRouter)
@@ -19,6 +22,7 @@ app.use('/api/v1/products/',productRouter)
 app.use('/api/v1/orders/',orderRouter) 
 app.use('/api/v1/tags/',tagRouter) 
 app.use('/api/v1/addresses/',addressRouter) 
+app.use('/api/v1/vouchers/',voucherRouter) 
 
 
 app.all('*',(req,res,next)=>{

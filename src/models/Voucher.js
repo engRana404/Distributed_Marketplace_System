@@ -20,6 +20,10 @@ Voucher.init({
       max: 5,
     }
   },
+  description: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
   voucherType: {
     type: DataTypes.ENUM('rateDiscount', 'fixedAmountDiscount', 'freeShipping', 'referralDiscount'),
     allowNull: false
@@ -37,7 +41,7 @@ Voucher.init({
     allowNull: true,
   },
   status: {
-    type: DataTypes.ENUM('active', 'expired', 'disabled'),
+    type: DataTypes.ENUM('active', 'disabled'),
     allowNull: false,
     defaultValue: 'active'
   }
