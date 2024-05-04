@@ -6,9 +6,9 @@ const {promisify} = require('util')
 
 const scryptPromise = promisify(scrypt)
 
-class User extends Model {}
 
-User.init({
+
+const User = sequelize.define('User',{
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -61,24 +61,19 @@ User.init({
           msg: "Invalid url format"
         }
       }
-    },
-    paymentMethodsIds: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-      allowNull: true,
-      defaultValue: [] // Default value is an empty array
     }
 },
 {
+  modelName: "users",
   defaultScope: {
       attributes: { exclude: ['password'] }
   },
+  
   timestamps: true,
   updatedAt: true,
   createdAt: true,
-  sequelize,
-  modelName: 'user'
 }
-);
+); 
 
 User.beforeCreate(async (user, options) => {
   if (user.password) {

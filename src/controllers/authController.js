@@ -10,6 +10,7 @@ const scryptPromise = promisify(scrypt)
 
 
 exports.signup = catchAsync(async (req,res,next)=>{
+  
   // console.log(req)
   req.body.email = req.body.email.toLowerCase()
 

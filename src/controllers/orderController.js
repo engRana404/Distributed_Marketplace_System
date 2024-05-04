@@ -1,21 +1,25 @@
-const { Order, OrderItem, Product, Voucher, User, UserVoucher} = require('../models')
+const { Order, OrderItem, Product, Voucher, User, UserVoucher, Cart} = require('../models')
 const sequelize = require('../config/database')
 const catchAsync = require('../utils/catchAsync')
 const AppError = require('../utils/appError')
+const filterObj = require('../utils/filterObj')
+const { createPaymentIntent } = require('../utils/stripe')
 
 
 exports.createOrder = catchAsync(async (req, res, next) => {
+  const filteredBody = filterObj(req.body,'userId','addressId','voucherId')
   const transaction = await sequelize.transaction()
-  const order = await Order.create({
-    userId: req.user.id,
-    addressId: req.body.addressId,
-    voucherId: req.bosy.voucherId || null
-  },{
+  const order = await Order.create(filteredBody,{
     transaction
   })
   let totalAmount = order.shippingFees
+  const cartItems = await Cart.findAll({
+    where: {
+      userId: filteredBody.userId
+    }
+  },{transaction})
   
-  for(const item of req.body.items){
+  for(const item of cartItems){
     const product = await Product.findByPk(item.productId,{transaction})
     if(!product){
       return next(new AppError(`No product with this id.`,400))
@@ -23,7 +27,7 @@ exports.createOrder = catchAsync(async (req, res, next) => {
     const orderItem = await OrderItem.create({
       productId: product.id,
       quantity: item.quantity,
-      price: product.price,
+      price: product.price * item.quantity,
       orderId: order.id
     },{transaction})
     totalAmount += orderItem.price
@@ -73,12 +77,20 @@ exports.createOrder = catchAsync(async (req, res, next) => {
   order.finalTotalAmount = finalTotalAmount
   order.totalAmount = totalAmount
   await order.save({transaction})
+  await Cart.destroy({
+    where: {
+      userId: filteredBody.userId
+    }
+  },{transaction})
   await transaction.commit();
+  const paymentIntent = await createPaymentIntent(order.finalTotalAmount,"egp")
+
 
   res.status(201).json({
     status:"success",
     data: {
-      order
+      order,
+      clientSecret: paymentIntent.client_secret
     }})
 })
 

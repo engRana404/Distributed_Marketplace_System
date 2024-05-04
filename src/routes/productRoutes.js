@@ -4,7 +4,7 @@ const authController = require('../controllers/authController')
 const productController = require('../controllers/productController')
 
 const router = express.Router()
-router.route('/').post(authController.protect,authController.restrictTo('admin'),productController.createProduct)
+router.route('/').post(authController.protect,authController.restrictTo('admin'), productController.uploadProductPhotos, productController.createProduct, productController.uploadProductPhotosToS3)
                   .get(productController.getFilteredProducts)
 
 router.route('/:id').get(productController.getProductById)

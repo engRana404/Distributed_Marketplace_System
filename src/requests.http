@@ -1,4 +1,14 @@
 ### SIGNUP
+POST http://192.168.112.233:5000
+Content-Type: application/json
+Authorization: Bearer sjbs
+
+{
+  "message": "any"
+}
+
+
+
 POST http://localhost:3000/api/v1/auth/signup
 Content-Type: application/json
 
@@ -20,4 +30,6 @@ Content-Type: application/json
 
 ### GET ALL USERS
 GET http://localhost:3000/api/v1/users
+
+
 

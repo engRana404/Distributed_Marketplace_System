@@ -1,9 +1,9 @@
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../config/database');
 
-class Address extends Model {}
+// class Address extends Model {}
 
-Address.init({
+const Address = sequelize.define('Address',{
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -30,16 +30,15 @@ Address.init({
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'users',
+      model: 'Users',
       key: 'id'
   }},
 },
 {
-  sequelize,
+ modelName: "addresses",
   timestamps: true,
   createdAt: true,
   updatedAt: true,
-  modelName: 'address'
 }
 )
 

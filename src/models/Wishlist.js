@@ -2,9 +2,9 @@
 const sequelize = require('../config/database');
 const { DataTypes, Model } = require('sequelize')
 
-class WishList extends Model {}
+// class WishList extends Model {}
 
-WishList.init({
+const WishList = sequelize.define('Wishlist',{
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -14,21 +14,20 @@ WishList.init({
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'users',
+      model: 'Users',
       key: 'id'
   }},
   productId: {
     type: DataTypes.INTEGER,
     references: {
-      model: 'products',
+      model: 'Products',
       key: 'id'
     },
     allowNull: false
   },
 },
 {
-  sequelize,
-  modelName: 'wishlist',
+  modelName: "wishlist",
   indexes: [
     {
       unique: true,

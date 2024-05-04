@@ -1,9 +1,9 @@
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../config/database');
 
-class OrderItem extends Model {}
+// class OrderItem extends Model {}
 
-OrderItem.init({
+const OrderItem = sequelize.define('OrderItem',{
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -20,7 +20,7 @@ OrderItem.init({
   orderId: {
     type: DataTypes.INTEGER,
     references: {
-      model: 'orders',
+      model: 'Orders',
       key: 'id'
     },
     allowNull: false
@@ -28,15 +28,14 @@ OrderItem.init({
   productId: {
     type: DataTypes.INTEGER,
     references: {
-      model: 'products',
+      model: 'Products',
       key: 'id'
     },
     allowNull: false
   },
 },
 {
-  sequelize,
-  modelName: 'orderItem',
+  modelName: "orderItems",
   timestamps: true,
   createdAt: true,
   updatedAt: true,

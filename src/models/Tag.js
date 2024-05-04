@@ -1,9 +1,9 @@
 const { DataTypes, Model } = require('sequelize')
 const sequelize = require('../config/database')
 
-class Tag extends Model {}
+// class Tag extends Model {}
 
-Tag.init(
+const Tag = sequelize.define('Tag',
   {
     id: {
       type: DataTypes.INTEGER,
@@ -16,15 +16,14 @@ Tag.init(
     allowNull: false,
     defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
   },
-  name: {
+  name: { 
     type: DataTypes.STRING,
     allowNull: false,
     unique: true
   }
 },
 {
-  sequelize,
-  modelName: 'tag'
+  modelName:"tags"
 })
 
 module.exports = Tag

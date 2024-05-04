@@ -3,11 +3,12 @@ const sequelize = require('./config/database');
 const User = require('./models/User'); 
 const Product = require('./models/Product')
 const Address = require('./models/Address')
+const Voucher = require('./models/Voucher')
 const Order = require('./models/Order')
 const Tag = require('./models/Tag')
 const OrderItem = require('./models/OrderItem')
 const ProductTag = require('./models/ProductTag')
-const Voucher = require('./models/Voucher')
+
 const UserVoucher = require('./models/UserVoucher')
 const Wishlist = require('./models/Wishlist')
 const Cart = require('./models/Cart') 
@@ -307,9 +308,9 @@ Product.belongsToMany(Tag, {
 
 
 
-async function syncModels() {
+exports.syncModels = async () => { 
     try {
-        await sequelize.sync({force:true}); // Sync all models with the database
+        await sequelize.sync({force:true});  // Sync all models with the database
         // Or you can sync a specific model:
         // await User.sync();
         console.log('Models synced successfully.');
@@ -318,4 +319,3 @@ async function syncModels() {
     }
 }
 
-syncModels();

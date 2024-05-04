@@ -1,8 +1,8 @@
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../config/database');
 
-class Voucher extends Model {}
-Voucher.init({
+// class Voucher extends Model {}
+const Voucher = sequelize.define('Voucher',{
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -47,11 +47,10 @@ Voucher.init({
   }
 },
 {
-  sequelize,
+  modelName: "vouchers", 
   timestamps: true,
   createdAt: true,
   updatedAt: true,
-  modelName: 'voucher'
 })
 
 module.exports = Voucher

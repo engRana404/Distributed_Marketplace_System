@@ -1,9 +1,9 @@
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../config/database');
 
-class Order extends Model {}
+// class Order extends Model {}
 
-Order.init({
+const Order = sequelize.define('Order',{
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -15,9 +15,9 @@ Order.init({
     allowNull: true,
   },
   status: {
-    type: DataTypes.ENUM('pending', 'processing', 'shipped', 'delivered', 'cancelled'),
+    type: DataTypes.ENUM('incomplete','pending', 'processing', 'shipped', 'delivered', 'cancelled'),
     allowNull: false,
-    defaultValue: 'pending'
+    defaultValue: 'incomplete'
   },
   shippingFees: {
     type: DataTypes.DECIMAL,
@@ -36,30 +36,33 @@ Order.init({
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'users',
+      model: 'Users',
       key: 'id'
   }},
   addressId: {
     type: DataTypes.INTEGER,
     references: {
-      model: 'addresses',
+      model: 'Addresses',
       key: 'id'
   }
+  },
+  paymentMethodId: {
+    type: DataTypes.STRING,
+    allowNull: true
   },
   voucherId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'vouchers',
+      model: 'Vouchers',
       key: 'id'
   }},
 },
 {
-  sequelize,
+  modelName: "orders",
   timestamps: true,
   createdAt: true,
   updatedAt: true,
-  modelName: 'order'
 })
 
 

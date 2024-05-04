@@ -15,6 +15,21 @@ services:
     env_file:
       - ./.env
     depends_on:
-      - redis
-  redis:
-    image: redis
+      - node_db
+
+  node_db:
+    container_name: node_db
+    image: postgres:12
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: e-commerce
+      POSTGRES_USER: example
+      POSTGRES_PASSWORD: root
+    volumes:
+      - node_db_data:/var/lib/postgresql/data
+
+
+
+volumes:
+  node_db_data: {}

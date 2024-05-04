@@ -4,6 +4,49 @@ const AppError = require('../utils/appError')
 const filterObj = require('../utils/filterObj')
 const sequelize = require('../config/database')
 const { Op } = require('@sequelize/core');
+const multer = require('multer')
+const s3 = require('../utils/s3')
+
+
+const multerStorage = multer.memoryStorage()
+const multerFilter = (req,file,cb) =>{
+    if(file.mimetype.startsWith('image')){
+        cb(null,true)
+    }else{ 
+       return cb(new AppError('Not an image! Please upload only images.',400))
+    }
+}
+const upload = multer({
+    storage: multerStorage,
+    fileFilter: multerFilter
+})
+
+exports.uploadProductPhotos = upload.array('photos')
+exports.uploadProductPhotosToS3 = catchAsync(async (req,res,next) => {
+    console.log(req.files)
+    if(!req.files){
+        return next(new AppError(`No image to upload`,400))
+    }
+    req.product.imagesUrls = []
+    for(let i = 0 ; i < req.files.length ; i++){
+        req.files[i].filename = `images/products/product-${req.product.id}-${i+1}.png`
+        // req.files[i].buffer =  await sharp(req.files[i].buffer)
+        // .toFormat('png')
+        // .png({ quality: 90})
+        // .toBuffer()
+        const result =  await s3.uploadFile(req.files[i],'image/png')
+        console.log('the s3 result '+ result)
+        req.product.imagesUrls.push(result)
+    }
+    await req.product.save()
+    res.status(201).json({
+      status:"success",
+      data: {
+        product: req.product
+      }
+    })
+}
+)
 
 
 exports.getFilteredProducts =  catchAsync(async (req, res, next) => {
@@ -74,10 +117,9 @@ exports.createProduct = catchAsync(async (req, res, next) => {
     name: req.body.name,
     price: req.body.price,
     description: req.body.description,
-    quantity: req.body.quantity,
-    imagesUrls: req.body.imagesUrls
+    quantity: req.body.quantity
   },{transaction})
-  console.log(product.id)
+  console.log(req.body.tagsIds)
   for(let tagId of req.body.tagsIds) {
     await ProductTag.create({
       productId: product.id,
@@ -85,12 +127,9 @@ exports.createProduct = catchAsync(async (req, res, next) => {
     },{transaction})
   }
   await transaction.commit();
-  res.status(201).json({
-    status:"success",
-    data: {
-      product
-    }
-  })
+  req.product = product
+  next()
+  
 })
 
 exports.getProductById = catchAsync(async (req, res, next) => {

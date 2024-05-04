@@ -1,4 +1,5 @@
-const express  = require('express')
+console.log('any')
+const express = require('express')
 const authRouter = require('./routes/authRoutes')
 const userRouter = require('./routes/userRoutes')
 const productRouter = require('./routes/productRoutes')
@@ -7,14 +8,18 @@ const tagRouter = require('./routes/tagRoutes')
 const addressRouter = require('./routes/addressRoutes')
 const voucherRouter = require('./routes/voucherRoutes')
 const sequelize = require('./config/database');
+const sync = require('./sync')
 const bodyParser = require('body-parser');
 const AppError = require('./utils/appError');
 const errorHandler = require('./controllers/errorController')
 const dotenv = require("dotenv");
 
+dotenv.config(); 
+
 
 
 const app = express()
+ sync.syncModels()
 app.use(bodyParser.json())
 app.use('/api/v1/auth/',authRouter)
 app.use('/api/v1/users/',userRouter) 
@@ -37,7 +42,7 @@ app.use(errorHandler)
  
 
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
+ app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
 

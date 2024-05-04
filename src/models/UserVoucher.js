@@ -1,9 +1,9 @@
 const sequelize = require('../config/database')
 const { DataTypes, Model } = require('sequelize')
 
-class UserVoucher extends Model {}
+// class UserVoucher extends Model {}
 
-UserVoucher.init({
+const UserVoucher = sequelize.define('UserVoucher',{
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -17,20 +17,19 @@ UserVoucher.init({
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'users',
+      model: 'Users',
       key: 'id'
   }},
   voucherId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'vouchers',
+      model: 'Vouchers',
       key: 'id'
   }},
 },
 {
-  sequelize,
-  modelName: 'userVoucher',
+  modelName: "userVouchers",
   timestamps: true,
   createdAt: true,
   updatedAt: true,

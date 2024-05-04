@@ -1,9 +1,9 @@
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../config/database');
 
-class Cart extends Model {}
 
-Cart.init({
+
+const Cart = sequelize.define('Cart',{
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -17,13 +17,13 @@ Cart.init({
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'users',
+      model: 'Users',
       key: 'id'
   }},
   productId: {
     type: DataTypes.INTEGER,
     references: {
-      model: 'products',
+      model: 'Products',
       key: 'id'
     },
     allowNull: false
@@ -34,11 +34,10 @@ Cart.init({
   }
 },
 {
+  modelName: "cart",
   timestamps: true,
   createdAt: true,
   updatedAt: true,
-  sequelize,
-  modelName: 'cart',
   indexes: [
     {
       unique: true,
