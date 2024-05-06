@@ -1,13 +1,15 @@
-const { Voucher, UserVoucher, User} = require('../models')
+const { Voucher,Voucher2, UserVoucher, User, UserVoucher2, User2} = require('../models')
 const catchAsync = require('../utils/catchAsync')
 const AppError = require('../utils/appError')
 const filterObj = require('../utils/filterObj')
-const sequelize = require('../config/database')
+const {sequelize} = require('../config/database')
 const { Op } = require('@sequelize/core');
+const { getNewId } = require('../utils/getNewId')
 
 exports.createVoucher = catchAsync(async (req, res, next) => {
   const filteredBody = filterObj(req.body,'expiresAt','code','description','value','voucherType','minimumPurchaseAmount', 'maximumDiscountAmount', 'status')
   const voucher = await Voucher.create(filteredBody)
+  const voucher2 = await Voucher2.create(filteredBody)
   res.status(201).json({
     status: "success",
     data: {
@@ -93,6 +95,13 @@ exports.updateVoucher = catchAsync(async (req, res, next) => {
     returning: true
   })
 
+  const [rowsAffected2, updatedRows2] = await Voucher2.update(filteredBody,{
+    where: {
+      id: req.params.id
+    },
+    returning: true
+  })
+
   if(rowsAffected === 0){
     return next(new AppError("No Voucher with this id!", 404))
   }
@@ -110,6 +119,12 @@ exports.deleteVoucher = catchAsync(async (req, res, next) => {
       id: req.params.id
     }
   })
+
+  const deletedVoucher2 = await Voucher2.destroy({
+    where: {
+      id: req.params.id
+    }
+  })
   if(!deletedVoucher){
     return next(new AppError("No Voucher with this id!", 404))
   }
@@ -121,7 +136,14 @@ exports.deleteVoucher = catchAsync(async (req, res, next) => {
 exports.assignVoucherToUsers = catchAsync(async (req, res, next) => {
   const userVouchersList = []
   for(let userData of req.body.usersData){
-  const userVoucher = await UserVoucher.create({
+    const id = await getNewId(UserVoucher, UserVoucher2, userData.id)
+  const userVoucher = userData.id %2 === 0 ? await UserVoucher2.create({
+    id,
+    userId: userData.id,
+    voucherId: req.params.id,
+    usageLimit: userData.usageLimit
+  }) :  await UserVoucher.create({
+    id,
     userId: userData.id,
     voucherId: req.params.id,
     usageLimit: userData.usageLimit

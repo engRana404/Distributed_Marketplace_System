@@ -1,5 +1,5 @@
 const { DataTypes, Model } = require('sequelize')
-const sequelize = require('../config/database')
+const {sequelize,sequelize2} = require('../config/database');
 // class Product extends Model {}
 
  const Product = sequelize.define('Product',{
@@ -14,7 +14,7 @@ const sequelize = require('../config/database')
     allowNull: false
   },
   price: {
-    type: DataTypes.DECIMAL,
+    type: DataTypes.FLOAT,
     allowNull: false
   },
   description: {
@@ -40,16 +40,73 @@ const sequelize = require('../config/database')
     }
   },
   sizes: {
-    type: DataTypes.ARRAY(DataTypes.STRING )
+    type: DataTypes.ARRAY(DataTypes.STRING ),
+    allowNull: true
+  },
+  colorsList: {
+    type: DataTypes.ARRAY(DataTypes.STRING ),
+    allowNull: true
   }
 },
 {
-  modelName: "products",
   timestamps: true,
   createdAt: true,
   updatedAt: true,
 })
 
-module.exports = Product
+
+const Product2 = sequelize2.define('Product',{
+  id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  price: {
+    type: DataTypes.FLOAT,
+    allowNull: false
+  },
+  description: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  quantity: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  imagesUrls: {
+    type: DataTypes.ARRAY(DataTypes.STRING),
+    allowNull: true,
+    validate: {
+      isNotEmpty(value) {
+        if(value && (value.length === 0) ) {
+          throw new Error('prodduct must have an image');
+        } 
+        if(value && (value.length > 5)) {
+          throw new Error('Product must have less than 5 images');
+        }
+      }
+    }
+  },
+  sizes: {
+    type: DataTypes.ARRAY(DataTypes.STRING ),
+    allowNull: true
+  },
+  colorsList: {
+    type: DataTypes.ARRAY(DataTypes.STRING ),
+    allowNull: true
+  }
+},
+{
+  timestamps: true,
+  createdAt: true,
+  updatedAt: true,
+})
+
+module.exports = {Product,Product2}
 
 

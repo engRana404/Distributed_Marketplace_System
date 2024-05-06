@@ -16,6 +16,7 @@ services:
       - ./.env
     depends_on:
       - node_db
+      - node_db_2
 
   node_db:
     container_name: node_db
@@ -30,6 +31,20 @@ services:
       - node_db_data:/var/lib/postgresql/data
 
 
+  node_db_2:
+    container_name: node_db_2
+    image: postgres:12
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: e-commerce
+      POSTGRES_USER: example
+      POSTGRES_PASSWORD: root
+    volumes:
+      - node_db_data_2:/var/lib/postgresql/data
+
+
 
 volumes:
   node_db_data: {}
+  node_db_data_2: {}

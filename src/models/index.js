@@ -1,15 +1,16 @@
 
-const User = require('./User'); 
-const Product = require('./Product')
-const Order = require('./Order')
-const Address = require('./Address')
-const Cart = require('./Cart') 
-const OrderItem = require('./OrderItem')
-const Tag = require('./Tag')
-const ProductTag = require('./ProductTag')
-const UserVoucher = require('./UserVoucher')
-const Wishlist = require('./Wishlist')
-const Voucher = require('./Voucher')
+const {User,User2} = require('./User'); 
+const {Product,Product2} = require('./Product')
+const {Voucher, Voucher2} = require('./Voucher')
+const {Address,Address2} = require('./Address')
+const {Order,Order2} = require('./Order')
+const {Cart,Cart2} = require('./Cart') 
+const {OrderItem,OrderItem2} = require('./OrderItem')
+const {Tag,Tag2} = require('./Tag')
+const {ProductTag,ProductTag2} = require('./ProductTag')
+const {UserVoucher,UserVoucher2} = require('./UserVoucher')
+const {Wishlist, Wishlist2} = require('./Wishlist')
+
 
 User.hasMany(Address, {
     foreignKey: {
@@ -98,30 +99,6 @@ Product.belongsToMany(Order, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE"
 })
-// Order.hasMany(OrderItem, {
-//     foreignKey: {
-//         name: "orderId",
-//         allowNull: false
-//     },
-// })
-// OrderItem.belongsTo(Order, {
-//     foreignKey: {
-//         name: "orderId",
-//         allowNull: false
-//     },
-// })
-// Product.hasMany(OrderItem, {
-//     foreignKey: {
-//         name: "productId",
-//         allowNull: false
-//     },
-// })
-// OrderItem.belongsTo(Product, {
-//     foreignKey: {
-//         name: "productId",
-//         allowNull: false
-//     },
-// })
 
 
 
@@ -143,30 +120,6 @@ Product.belongsToMany(User, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE"
 })
-// User.hasMany(Cart, {
-//     foreignKey: {
-//         name: "userId",
-//         allowNull: false
-//     },
-// })
-// Cart.belongsTo(User, {
-//     foreignKey: {
-//         name: "userId",
-//         allowNull: false
-//     },
-// })
-// Product.hasMany(Cart, {
-//     foreignKey: {
-//         name: "productId",
-//         allowNull: false
-//     },
-// })
-// Cart.belongsTo(Product, {
-//     foreignKey: {
-//         name: "productId",
-//         allowNull: false
-//     },
-// })
 
 
 
@@ -188,30 +141,6 @@ Product.belongsToMany(User, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE"
 })
-// User.hasMany(WishList, {
-//     foreignKey: {
-//         name: "userId",
-//         allowNull: false
-//     },
-// })
-// WishList.belongsTo(User, {
-//     foreignKey: {
-//         name: "userId",
-//         allowNull: false
-//     },
-// })
-// Product.hasMany(WishList, {
-//     foreignKey: {
-//         name: "productId",
-//         allowNull: false
-//     },
-// })
-// WishList.belongsTo(Product, {
-//     foreignKey: {
-//         name: "productId",
-//         allowNull: false
-//     },
-// })
 
 
 
@@ -233,30 +162,6 @@ Product.belongsToMany(Tag, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
   });
-  // Product.hasMany(ProductTag, {
-  //   foreignKey: {
-  //       name: 'productId',
-  //       allowNull: false
-  //   },
-  // })
-  // ProductTag.belongsTo(Product, {
-  //   foreignKey: {
-  //       name: 'productId',
-  //       allowNull: false
-  //   },
-  // })
-  // Tag.hasMany(ProductTag, {
-  //   foreignKey: {
-  //       name: 'tagId',
-  //       allowNull: false
-  //   },
-  // })
-  // ProductTag.belongsTo(Tag, {
-  //   foreignKey: {
-  //       name: 'tagId',
-  //       allowNull: false
-  //   },
-  // })
 
 
 
@@ -278,30 +183,179 @@ Product.belongsToMany(Tag, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
   })
-  // User.hasMany(UserVoucher, {
-  //   foreignKey: {
-  //       name: "userId",
-  //       allowNull: false
-  //   },
-  // })
-  // UserVoucher.belongsTo(User, {
-  //   foreignKey: {
-  //       name: "userId",
-  //       allowNull: false
-  //   },
-  // })
-  // Voucher.hasMany(UserVoucher, {
-  //   foreignKey: {
-  //       name: "voucherId",
-  //       allowNull: false
-  //   },
-  // })
-  // UserVoucher.belongsTo(Voucher, {
-  //   foreignKey: {
-  //       name: "voucherId",
-  //       allowNull: false
-  //   },
-  // })
+
+
+  User2.hasMany(Address2, {
+    foreignKey: {
+        name: "userId",
+        allowNull: false,
+    },
+});
+Address2.belongsTo(User2,{
+    foreignKey: {
+        name: "userId",
+        allowNull: false,
+    },
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+})
+
+
+
+User2.hasMany(Order2, {
+    foreignKey: {
+        name: "userId",
+        allowNull: false,
+    },
+})
+Order2.belongsTo(User2,{
+    foreignKey: {
+        name: "userId",
+        allowNull: false,
+    },
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE'
+})
+
+
+
+Address2.hasMany(Order2, {
+    foreignKey: {
+        name: "addressId",
+        allowNull: false,
+    },
+})
+Order2.belongsTo(Address2, {
+    foreignKey: {
+        name: "addressId",
+        allowNull: false,
+    },
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE'
+})
+
+
+
+Voucher2.hasMany(Order2, {
+    foreignKey: {
+        name: "voucherId",
+        allowNull: true
+    },
+})
+Order2.belongsTo(Voucher2, {
+    foreignKey: {
+        name: "voucherId",
+        allowNull: true
+    },
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE'
+})
+
+
+
+Order2.belongsToMany(Product2, {
+    through: OrderItem2,
+    foreignKey: {
+        name: "orderId",
+        allowNull: false
+    },
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE"
+
+})
+Product2.belongsToMany(Order2, {
+    through: OrderItem2,
+    foreignKey: {
+        name: "productId",
+        allowNull: false
+    },
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE"
+})
+
+
+
+User2.belongsToMany(Product2, {
+    through: Cart2,
+    foreignKey: {
+        name: "userId",
+        allowNull: false
+    },
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE"
+})
+Product2.belongsToMany(User2, {
+    through: Cart2,
+    foreignKey: {
+        name: "productId",
+        allowNull: false
+    },
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE"
+})
+
+
+
+User2.belongsToMany(Product2, {
+    through: Wishlist2,
+    foreignKey: {
+        name: "userId",
+        allowNull: false
+    },
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE"
+})
+Product2.belongsToMany(User2, {
+    through: Wishlist2,
+    foreignKey: {
+        name: "productId",
+        allowNull: false
+    },
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE"
+})
+
+
+
+Product2.belongsToMany(Tag2, {
+    through: ProductTag2,
+    foreignKey: {
+        name: 'productId',
+        allowNull: true
+    },
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE', 
+  });
+  Tag2.belongsToMany(Product2, {
+    through: ProductTag2,
+    foreignKey: {
+        name: 'tagId',
+        allowNull: true
+    },
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  });
+
+
+
+  User2.belongsToMany(Voucher2, {
+    through: UserVoucher2,
+    foreignKey: {
+        name: "userId",
+        allowNull: false
+    },
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
+  Voucher2.belongsToMany(User2, {
+    through: UserVoucher2,
+    foreignKey: {
+        name: "voucherId",
+        allowNull: false
+    },
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
 
   module.exports = {
     User,
@@ -314,5 +368,16 @@ Product.belongsToMany(Tag, {
     Cart,
     ProductTag,
     OrderItem,
-    UserVoucher
+    UserVoucher,
+    User2,
+    Product2,
+    Order2,
+    Address2,
+    Tag2,
+    Voucher2,
+    Wishlist2,
+    Cart2,
+    ProductTag2,
+    OrderItem2,
+    UserVoucher2
   }

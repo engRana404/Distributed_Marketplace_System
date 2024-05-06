@@ -7,19 +7,35 @@ const orderRouter = require('./routes/orderRoutes')
 const tagRouter = require('./routes/tagRoutes')
 const addressRouter = require('./routes/addressRoutes')
 const voucherRouter = require('./routes/voucherRoutes')
-const sequelize = require('./config/database');
-const sync = require('./sync')
+
+// const {syncModels} = require('./sync')
 const bodyParser = require('body-parser');
 const AppError = require('./utils/appError');
 const errorHandler = require('./controllers/errorController')
 const dotenv = require("dotenv");
+const { sequelize, sequelize2 } = require('./config/database')
 
 dotenv.config(); 
 
-
+ 
 
 const app = express()
- sync.syncModels()
+async function syncModels() { 
+  try {
+      await sequelize.sync({alter:true});  // Sync all models with the database
+      // Or you can sync a specific model:
+      // await User.sync();
+      console.log('Models synced successfully.');
+
+      await sequelize2.sync({alter:true});  // Sync all models with the database
+      // Or you can sync a specific model:
+      // await User.sync();
+      console.log('Models 2 synced successfully.');
+  } catch (error) {
+      console.error('Error syncing models:', error);
+  }
+}
+ syncModels()
 app.use(bodyParser.json())
 app.use('/api/v1/auth/',authRouter)
 app.use('/api/v1/users/',userRouter) 
@@ -44,5 +60,5 @@ app.use(errorHandler)
 const PORT = process.env.PORT || 4000;
  app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
-});
+}); 
 

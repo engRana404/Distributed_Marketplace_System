@@ -38,7 +38,7 @@ return deleted
 }
 
 const createPaymentIntent = async (amount, currency) => {
-
+try{
 const paymentIntent = await stripe.paymentIntents.create({
   amount,
   currency,
@@ -47,6 +47,20 @@ const paymentIntent = await stripe.paymentIntents.create({
   },
 });
 return paymentIntent
+}catch(e){
+console.log(e)
+}
+}
+
+const retrievePaymentIntent = async (id) => {
+  try{
+      console.log(id)
+const paymentIntent = await stripe.paymentIntents.retrieve(id);
+
+return paymentIntent
+  }catch(e){
+    console.log(e)
+  }
 }
 
 
@@ -55,5 +69,6 @@ module.exports = {
   retrieveCustomer,
   updateCustomer,
   deleteCustomer,
-  createPaymentIntent
+  createPaymentIntent,
+  retrievePaymentIntent
 }

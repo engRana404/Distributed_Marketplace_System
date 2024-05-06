@@ -4,9 +4,11 @@ const authController = require('../controllers/authController')
 const orderController = require('../controllers/orderController')
 
 const router = express.Router()
-router.post('/',authController.protect,authController.restrictTo('admin'),orderController.createOrder)
-router.get('/',authController.protect,authController.restrictTo('admin'),orderController.getFilteredOrders)
-router.get('/:id',authController.protect,orderController.getOrderById)
+router.route('/').post(authController.protect,orderController.createOrder)
+                .get(authController.protect,authController.restrictTo('admin'),orderController.getFilteredOrders)
+router.route('/:id').get(authController.protect,orderController.getOrderById)
+                    .patch(authController.protect,authController.restrictTo('admin'),orderController.updateOrder)
+router.patch('/:id/check-order',authController.protect, orderController.checkPaymentIntentAndConfirmOrder)
 
 module.exports = router
  

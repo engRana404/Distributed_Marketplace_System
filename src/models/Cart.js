@@ -1,5 +1,5 @@
 const { DataTypes, Model } = require('sequelize');
-const sequelize = require('../config/database');
+const {sequelize,sequelize2} = require('../config/database');
 
 
 
@@ -7,7 +7,6 @@ const Cart = sequelize.define('Cart',{
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-    autoIncrement: true,  // Add auto-incrementing behavior
   },
   quantity: {
     type: DataTypes.INTEGER,
@@ -46,4 +45,45 @@ const Cart = sequelize.define('Cart',{
   ]
 })
 
-module.exports = Cart;
+const Cart2 = sequelize2.define('Cart',{
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+  },
+  quantity: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'Users',
+      key: 'id'
+  }},
+  productId: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: 'Products',
+      key: 'id'
+    },
+    allowNull: false
+  },
+  productId: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  }
+},
+{
+  timestamps: true,
+  createdAt: true,
+  updatedAt: true,
+  indexes: [
+    {
+      unique: true,
+      fields: ['userId', 'productId']
+    }
+  ]
+})
+
+module.exports = {Cart,Cart2};
