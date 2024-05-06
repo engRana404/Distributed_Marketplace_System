@@ -1,0 +1,35 @@
+### SIGNUP
+POST http://192.168.112.233:5000
+Content-Type: application/json
+Authorization: Bearer sjbs
+
+{
+  "message": "any"
+}
+
+
+
+POST http://localhost:3000/api/v1/auth/signup
+Content-Type: application/json
+
+{
+  "name": "Hazem Hamdy",
+  "email": "test1@gmail.com",
+  "password": "test@1234"
+}
+
+### SIGNIN
+POST http://localhost:3000/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "test1@gmail.com",
+  "password": "tesst@1234"
+}
+
+
+### GET ALL USERS
+GET http://localhost:3000/api/v1/users
+
+
+
