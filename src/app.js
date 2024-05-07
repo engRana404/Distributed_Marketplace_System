@@ -1,5 +1,6 @@
 console.log('any')
 const express = require('express')
+const cors = require('cors')
 const authRouter = require('./routes/authRoutes')
 const userRouter = require('./routes/userRoutes')
 const productRouter = require('./routes/productRoutes')
@@ -20,6 +21,13 @@ dotenv.config();
  
 
 const app = express()
+
+const corsOptions = {
+  origin: 'https://vu-project-ivory.vercel.app/',
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
 async function syncModels() { 
   try {
       await sequelize.sync({alter:true});  // Sync all models with the database
