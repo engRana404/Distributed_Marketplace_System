@@ -180,7 +180,7 @@ exports.createOrder = catchAsync(async (req, res, next) => {
     status:"success",
     data: {
       order,
-      clientSecret: paymentIntent.client_secret
+      paymentIntent
     }})
 })
 
