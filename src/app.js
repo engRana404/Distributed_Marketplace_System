@@ -22,12 +22,12 @@ dotenv.config();
 const app = express()
 async function syncModels() { 
   try {
-      await sequelize.sync({alter:true});  // Sync all models with the database
+      await sequelize.sync({force:true});  // Sync all models with the database
       // Or you can sync a specific model:
       // await User.sync();
       console.log('Models synced successfully.');
 
-      await sequelize2.sync({alter:true});  // Sync all models with the database
+      await sequelize2.sync({force:true});  // Sync all models with the database
       // Or you can sync a specific model:
       // await User.sync();
       console.log('Models 2 synced successfully.');
