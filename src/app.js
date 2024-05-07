@@ -27,7 +27,7 @@ const corsOptions = {
   optionsSuccessStatus: 200,
 };
 
-app.use(cors(corsOptions));
+app.use(cors());
 async function syncModels() { 
   try {
       await sequelize.sync({alter:true});  // Sync all models with the database
